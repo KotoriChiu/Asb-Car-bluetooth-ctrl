@@ -9,49 +9,44 @@ void setup(){
     Serial.begin(9600);
 }
 
-void loop(){
+void loop(){ 
     char bluetooth;
     if(Serial.available()){ //讀取藍芽是否有連上(boolean)
-        bluetooth = Serial.read(); //讀取控制端傳送過來的資料
+        bluetooth = Serial.read(); //Read bluetooth's data 
         Serial.println(bluetooth);
-        switch(bluetooth){
+        switch(bluetooth){ //bluetooth moto ctrl
             case 'w': //前進
             bluetooth_data(1);
-            bluetooth = 'o';
             break;
             case 's': //後退
             bluetooth_data(2);
-            bluetooth = 'o';
             break;
             case 'a': //原地左轉
             bluetooth_data(3);
-            bluetooth = 'o';
             break;
             case 'd': //原地右轉
             bluetooth_data(4);
-            bluetooth = 'o';
             break;
             case 'q': //前左偏
             bluetooth_data(5);
-            bluetooth = 'o';
             break;
             case 'e': //前右偏
             bluetooth_data(6);
-            bluetooth = 'o';
             break;
             case 'z': //後左偏
             bluetooth_data(7);
-            bluetooth = 'o';
             break;
             case 'c': //後又偏
             bluetooth_data(8);
-            bluetooth = 'o';
+            break;
+            case 'p': //stop the car
+            stay();
             break;
         }
     }
 }
 
-void bluetooth_data(int data){
+void bluetooth_data(int data){ //Moto Ctrl
     switch(data){
         case 1:
         digitalWrite(rmoto,HIGH);
@@ -81,11 +76,11 @@ void bluetooth_data(int data){
         digitalWrite(rmoto,HIGH);
         analogWrite(rmoto_speed,SPEED);
         digitalWrite(lmoto,HIGH);
-        analogWrite(lmoto_speed,SPEED-100);
+        analogWrite(lmoto_speed,SPEED-150);
         break;
         case 6:
         digitalWrite(rmoto,HIGH);
-        analogWrite(rmoto_speed,SPEED-100);
+        analogWrite(rmoto_speed,SPEED-150);
         digitalWrite(lmoto,HIGH);
         analogWrite(lmoto_speed,SPEED);
         break;
@@ -93,7 +88,7 @@ void bluetooth_data(int data){
         digitalWrite(rmoto,LOW);
         analogWrite(rmoto_speed,SPEED);
         digitalWrite(lmoto,LOW);
-        analogWrite(lmoto_speed,SPEED-100);
+        analogWrite(lmoto_speed,SPEED-150);
         break;
         case 8:
         digitalWrite(rmoto,LOW);
@@ -102,4 +97,9 @@ void bluetooth_data(int data){
         analogWrite(lmoto_speed,SPEED);
         break;
     }
+}
+
+void stay(){ //Stop Ctrl
+    analogWrite(rmoto_speed,0);
+    analogWrite(lmoto_speed,0);
 }
